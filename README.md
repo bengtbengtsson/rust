@@ -34,8 +34,8 @@ brew upgrade rustup    # updates rustup itself (Homebrew-managed installs
 
 ## Neovim setup
 
-Neovim 0.12+ ships with everything needed for a working Rust setup — no
-external plugin manager required:
+Neovim 0.12+ ships with most of what's needed for a working Rust setup —
+no external plugin manager required:
 
 - `vim.pack` — built-in plugin manager (`vim.pack.add { ... }`)
 - `vim.lsp.config` / `vim.lsp.enable` — built-in LSP configuration
@@ -43,6 +43,22 @@ external plugin manager required:
   Rust parser is installed via the `nvim-treesitter` plugin below)
 - Auto-completion — trigger manually with `<C-x><C-o>` (omni) or enable
   `vim.lsp.completion` for LSP-driven completion
+
+### Prerequisite: tree-sitter CLI
+
+The current `nvim-treesitter` (main branch) builds parsers from source
+and shells out to a `tree-sitter` CLI binary. The Homebrew `tree-sitter`
+formula is the **library only** — you need the separate `tree-sitter-cli`
+formula:
+
+```sh
+brew install tree-sitter-cli
+```
+
+Without it, `:TSInstall rust` fails with
+`ENOENT: no such file or directory (cmd): 'tree-sitter'`.
+
+### init.lua
 
 Config lives at `~/.config/nvim/init.lua`. A minimal Rust-ready `init.lua`:
 
