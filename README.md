@@ -39,14 +39,20 @@ external plugin manager required:
 
 - `vim.pack` — built-in plugin manager (`vim.pack.add { ... }`)
 - `vim.lsp.config` / `vim.lsp.enable` — built-in LSP configuration
-- Tree-sitter — bundled, with `:TSInstall rust` for the Rust parser
+- Tree-sitter library — bundled (parsers for c/lua/vim/markdown only; the
+  Rust parser is installed via the `nvim-treesitter` plugin below)
 - Auto-completion — trigger manually with `<C-x><C-o>` (omni) or enable
   `vim.lsp.completion` for LSP-driven completion
 
 Config lives at `~/.config/nvim/init.lua`. A minimal Rust-ready `init.lua`:
 
 ```lua
--- Tree-sitter parser for Rust (run :TSInstall rust once)
+-- Plugins (nvim-treesitter provides :TSInstall and the Rust parser)
+vim.pack.add {
+  { src = 'https://github.com/nvim-treesitter/nvim-treesitter' },
+}
+-- After first start: run :TSInstall rust
+
 -- LSP for rust-analyzer
 vim.lsp.config('rust_analyzer', {
   cmd = { 'rust-analyzer' },
