@@ -23,10 +23,40 @@ rust-analyzer --version
 
 ## Neovim setup
 
-Neovim config lives at `~/.config/nvim/`. A minimal Rust-ready setup needs:
+Neovim 0.12+ ships with everything needed for a working Rust setup — no
+external plugin manager required:
 
-- **Plugin manager** — [lazy.nvim](https://github.com/folke/lazy.nvim)
-- **LSP** — [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) configured for `rust-analyzer`
-- **Syntax** — [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) with the `rust` parser
-- **Completion** — [blink.cmp](https://github.com/Saghen/blink.cmp) or [nvim-cmp](https://github.com/hrsh7th/nvim-cmp)
-- **Optional**: [rustaceanvim](https://github.com/mrcjkb/rustaceanvim) for richer Rust integration (inlay hints, `:RustRun`, debugging)
+- `vim.pack` — built-in plugin manager (`vim.pack.add { ... }`)
+- `vim.lsp.config` / `vim.lsp.enable` — built-in LSP configuration
+- Tree-sitter — bundled, with `:TSInstall rust` for the Rust parser
+- Auto-completion — trigger manually with `<C-x><C-o>` (omni) or enable
+  `vim.lsp.completion` for LSP-driven completion
+
+Config lives at `~/.config/nvim/init.lua`. A minimal Rust-ready `init.lua`:
+
+```lua
+-- Tree-sitter parser for Rust (run :TSInstall rust once)
+-- LSP for rust-analyzer
+vim.lsp.config('rust_analyzer', {
+  cmd = { 'rust-analyzer' },
+  filetypes = { 'rust' },
+  root_markers = { 'Cargo.toml', '.git' },
+})
+vim.lsp.enable('rust_analyzer')
+
+-- LSP-driven autocompletion on attach
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(ev)
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    if client and client:supports_method('textDocument/completion') then
+      vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
+    end
+  end,
+})
+```
+
+Optional plugins (install via `vim.pack.add`):
+
+- [rustaceanvim](https://github.com/mrcjkb/rustaceanvim) — richer Rust
+  integration (inlay hints, `:RustRun`, debugging)
+- [blink.cmp](https://github.com/Saghen/blink.cmp) — nicer completion UI
