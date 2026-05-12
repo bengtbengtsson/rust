@@ -21,6 +21,16 @@ cargo --version
 rust-analyzer --version
 ```
 
+### Keeping the toolchain up to date
+
+A new stable Rust ships every ~6 weeks. Update periodically (or when a
+crate requires a newer `rustc`):
+
+```sh
+rustup update          # updates rustc, cargo, and installed components
+rustup self update     # updates rustup itself
+```
+
 ## Neovim setup
 
 Neovim 0.12+ ships with everything needed for a working Rust setup — no
