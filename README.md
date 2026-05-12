@@ -28,7 +28,8 @@ crate requires a newer `rustc`):
 
 ```sh
 rustup update          # updates rustc, cargo, and installed components
-rustup self update     # updates rustup itself
+brew upgrade rustup    # updates rustup itself (Homebrew-managed installs
+                       # disable `rustup self update`)
 ```
 
 ## Neovim setup
